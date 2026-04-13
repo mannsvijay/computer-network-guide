@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6EC4-02 Computer Network — RTU Exam Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07080f;
+    --surface: #0e1020;
+    --surface2: #141628;
+    --border: rgba(99,102,241,0.18);
+    --border2: rgba(255,255,255,0.07);
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --gold: #f59e0b;
+    --red: #ef4444;
+    --green: #22c55e;
+    --cyan: #06b6d4;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --card-bg: rgba(255,255,255,0.03);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  /* NOISE OVERLAY */
+  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; }
+
+  /* HEADER */
+  .header { position:sticky; top:0; z-index:100; background:rgba(7,8,15,0.9); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:60px; }
+  .header-brand { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; color:var(--accent2); letter-spacing:0.05em; }
+  .header-meta { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); }
+  .header-badge { background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#f87171; padding:2px 10px; border-radius:20px; font-size:0.7rem; font-family:'DM Mono',monospace; }
+
+  /* HERO */
+  .hero { position:relative; padding:3.5rem 2rem 2.5rem; text-align:center; overflow:hidden; }
+  .hero::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 50% at 50% 0%, rgba(99,102,241,0.12) 0%, transparent 70%); pointer-events:none; }
+  .hero-eyebrow { font-family:'DM Mono',monospace; font-size:0.7rem; letter-spacing:0.18em; color:var(--accent); text-transform:uppercase; margin-bottom:0.8rem; }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:800; line-height:1.1; margin-bottom:0.6rem; }
+  .hero h1 span { color:var(--accent2); }
+  .hero-sub { color:var(--muted); font-size:0.9rem; max-width:580px; margin:0 auto 1.5rem; }
+  .stats-row { display:flex; flex-wrap:wrap; gap:1rem; justify-content:center; margin-top:1.5rem; }
+  .stat-pill { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:0.5rem 1.2rem; font-family:'DM Mono',monospace; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; }
+  .stat-pill strong { font-size:1.1rem; font-family:'Syne',sans-serif; font-weight:700; color:var(--accent2); }
+
+  /* ALERT */
+  .alert { margin:0 2rem 1.5rem; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-left:3px solid var(--red); border-radius:8px; padding:0.9rem 1.2rem; font-size:0.85rem; display:flex; gap:0.7rem; align-items:flex-start; }
+  .alert-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+  .alert strong { color:#f87171; display:block; margin-bottom:2px; }
+
+  /* TABS */
+  .tabs-wrapper { padding:0 2rem; margin-bottom:1.5rem; }
+  .tabs { display:flex; gap:0.3rem; flex-wrap:wrap; background:var(--surface); border:1px solid var(--border2); border-radius:12px; padding:4px; }
+  .tab-btn { flex:1; min-width:fit-content; padding:0.45rem 0.9rem; border-radius:9px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:0.78rem; font-weight:500; transition:all 0.2s; background:transparent; color:var(--muted); white-space:nowrap; }
+  .tab-btn.active { background:var(--accent); color:#fff; box-shadow:0 0 16px rgba(99,102,241,0.3); }
+  .tab-btn:hover:not(.active) { color:var(--text); background:var(--surface2); }
+
+  /* CONTENT */
+  .content { padding:0 2rem 3rem; }
+  .tab-panel { display:none; animation:fadeIn 0.25s ease; }
+  .tab-panel.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* SECTION TITLE */
+  .sec-title { font-family:'Syne',sans-serif; font-weight:700; font-size:1.15rem; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
+  .sec-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* UNIT CARDS */
+  .unit-grid { display:grid; gap:1rem; }
+  .unit-card { background:var(--surface); border:1px solid var(--border2); border-radius:12px; overflow:hidden; }
+  .unit-header { padding:0.85rem 1.2rem; display:flex; align-items:center; justify-content:space-between; cursor:pointer; border-bottom:1px solid var(--border2); }
+  .unit-header:hover { background:rgba(255,255,255,0.02); }
+  .unit-num { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--accent); background:rgba(99,102,241,0.1); border:1px solid rgba(99,102,241,0.2); padding:2px 8px; border-radius:20px; }
+  .unit-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; margin-left:0.7rem; flex:1; }
+  .unit-hrs { font-family:'DM Mono',monospace; font-size:0.7rem; color:var(--muted); }
+  .unit-body { padding:1.2rem; display:none; }
+  .unit-body.open { display:block; }
+  .unit-topics { list-style:none; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:0.4rem; margin-bottom:1rem; }
+  .unit-topics li { font-size:0.82rem; padding:0.3rem 0.6rem; background:var(--surface2); border-radius:6px; display:flex; align-items:center; gap:0.4rem; }
+  .badge { font-size:0.62rem; padding:1px 7px; border-radius:20px; font-weight:600; white-space:nowrap; }
+  .badge-high { background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.3); }
+  .badge-med { background:rgba(245,158,11,0.15); color:#fbbf24; border:1px solid rgba(245,158,11,0.3); }
+  .badge-low { background:rgba(100,116,139,0.15); color:#94a3b8; border:1px solid rgba(100,116,139,0.3); }
+  .badge-crit { background:rgba(239,68,68,0.25); color:#ff6b6b; border:1px solid rgba(239,68,68,0.5); font-size:0.6rem; }
+
+  /* VIDEO TABLE */
+  .table-wrap { overflow-x:auto; border-radius:10px; border:1px solid var(--border2); margin-bottom:1rem; }
+  table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+  th { background:var(--surface2); padding:0.6rem 0.8rem; text-align:left; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.05em; color:var(--muted); border-bottom:1px solid var(--border2); white-space:nowrap; }
+  td { padding:0.55rem 0.8rem; border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:rgba(255,255,255,0.02); }
+  .rec-watch { color:var(--green); font-weight:600; font-size:0.72rem; }
+  .rec-2x { color:var(--cyan); font-weight:600; font-size:0.72rem; }
+  .rec-skip { color:var(--muted); font-size:0.72rem; text-decoration:line-through; }
+  .covered-yes { color:var(--green); font-size:0.75rem; }
+  .covered-no { color:var(--red); font-size:0.75rem; }
+  .covered-partial { color:var(--gold); font-size:0.75rem; }
+
+  /* VIDEO CHECKBOX */
+  .vid-check { width:15px; height:15px; accent-color:var(--accent); cursor:pointer; }
+  .vid-title { cursor:pointer; }
+  .vid-title:hover { color:var(--accent2); }
+  .checked-row td { opacity:0.5; }
+  .checked-row td:first-child { opacity:1; }
+
+  /* PRIORITY TAG */
+  .pri-tag { display:inline-flex; gap:1px; }
+  .pri-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); }
+  .pri-dot.empty { background:var(--surface2); border:1px solid var(--border); }
+
+  /* PYQ TABLE */
+  .pyq-year { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--accent); background:rgba(99,102,241,0.1); padding:1px 6px; border-radius:4px; white-space:nowrap; }
+  .pyq-part { font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--muted); }
+  .pyq-marks { font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--gold); }
+  .pyq-topic-tag { display:inline-block; background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.2); color:var(--cyan); padding:1px 7px; border-radius:10px; font-size:0.68rem; margin:1px; }
+
+  /* MISSING TOPICS */
+  .missing-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:0.8rem; }
+  .missing-card { background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.2); border-radius:10px; padding:0.9rem 1rem; }
+  .missing-card h4 { font-family:'Syne',sans-serif; font-weight:700; font-size:0.88rem; color:#f87171; margin-bottom:0.4rem; }
+  .missing-card p { font-size:0.78rem; color:var(--muted); line-height:1.5; }
+  .missing-card .fix { margin-top:0.5rem; font-size:0.75rem; color:var(--gold); background:rgba(245,158,11,0.08); border-radius:6px; padding:0.3rem 0.6rem; }
+
+  /* STRATEGY */
+  .day-plan { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+  .day-card { background:var(--surface); border:1px solid var(--border2); border-radius:12px; padding:1.2rem; }
+  .day-card h3 { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; margin-bottom:0.8rem; color:var(--accent2); }
+  .day-step { display:flex; gap:0.7rem; margin-bottom:0.6rem; align-items:flex-start; font-size:0.82rem; }
+  .step-num { font-family:'DM Mono',monospace; font-size:0.68rem; background:rgba(99,102,241,0.15); color:var(--accent); border-radius:4px; padding:1px 6px; flex-shrink:0; margin-top:2px; }
+  .step-info strong { display:block; font-size:0.83rem; }
+  .step-info span { color:var(--muted); font-size:0.75rem; }
+
+  /* PREDICTION */
+  .pred-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:0.8rem; }
+  .pred-card { background:var(--surface); border:1px solid var(--border2); border-radius:10px; padding:1rem; }
+  .pred-card h4 { font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem; }
+  .pred-q { font-size:0.8rem; padding:0.35rem 0; border-bottom:1px solid var(--border2); display:flex; align-items:center; gap:0.5rem; }
+  .pred-q:last-child { border-bottom:none; }
+  .fire { font-size:0.85rem; }
+
+  /* CHECKLIST */
+  .checklist { list-style:none; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:0.4rem; }
+  .checklist li { display:flex; align-items:center; gap:0.6rem; font-size:0.82rem; padding:0.3rem 0.5rem; }
+  .checklist li input { accent-color:var(--green); width:14px; height:14px; cursor:pointer; flex-shrink:0; }
+
+  /* PROGRESS */
+  .progress-bar { background:var(--surface2); border-radius:10px; height:8px; overflow:hidden; margin:0.3rem 0; }
+  .progress-fill { height:100%; border-radius:10px; transition:width 0.5s; }
+
+  /* FORMULAS */
+  .formula-box { background:var(--surface2); border:1px solid rgba(6,182,212,0.2); border-left:3px solid var(--cyan); border-radius:8px; padding:0.8rem 1rem; margin:0.5rem 0; font-family:'DM Mono',monospace; font-size:0.82rem; }
+  .formula-box .label { font-size:0.68rem; color:var(--cyan); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; font-family:'DM Sans',sans-serif; }
+
+  /* COVERAGE TABLE */
+  .cov-table td:last-child { min-width:120px; }
+  .cov-bar { height:6px; border-radius:10px; background:var(--surface2); overflow:hidden; margin-top:3px; }
+  .cov-fill { height:100%; border-radius:10px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:5px; height:5px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:5px; }
+
+  /* VIDEO TRACKER PROGRESS */
+  .vt-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.8rem; }
+  .vt-progress { font-family:'DM Mono',monospace; font-size:0.78rem; color:var(--accent); }
+
+  /* SECTION DIVIDER */
+  .divider { border:none; border-top:1px solid var(--border2); margin:1.8rem 0; }
+
+  @media(max-width:640px) {
+    .header { padding:0 1rem; }
+    .hero, .tabs-wrapper, .content { padding-left:1rem; padding-right:1rem; }
+    .alert { margin-left:1rem; margin-right:1rem; }
+    .tabs { gap:0.2rem; }
+    .tab-btn { padding:0.4rem 0.6rem; font-size:0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">6EC4-02 · CN Prep</div>
+  <div class="header-meta">RTU · VI Sem · ECE</div>
+  <div class="header-badge">⚡ Exam Ready</div>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">Rajasthan Technical University · B.Tech ECE</div>
+  <h1>Computer Network<br><span>Complete Exam Guide</span></h1>
+  <p class="hero-sub">PYQ analysis (2022–2025) · YouTube playlist mapping · Smart study strategy · Predicted questions</p>
+  <div class="stats-row">
+    <div class="stat-pill"><strong>6</strong>Units</div>
+    <div class="stat-pill"><strong>105</strong>Videos</div>
+    <div class="stat-pill"><strong>7</strong>PYQs Analyzed</div>
+    <div class="stat-pill"><strong>40 hrs</strong>Syllabus</div>
+    <div class="stat-pill"><strong>⚠️ 1</strong>Critical Gap</div>
+  </div>
+</section>
+
+<div class="alert">
+  <span class="alert-icon">🚨</span>
+  <div>
+    <strong>CRITICAL: Unit 2 (Queuing Theory) — NOT IN PLAYLIST!</strong>
+    Queuing Theory (Little's formula, M/M/1, M/M/m, Birth-Death process) appears in <strong>EVERY single paper</strong> from 2022–2025. Iske liye playlist mein ek bhi dedicated video nahi hai. Isko alag se padho — YouTube par "Queuing Theory M/M/1 in Hindi" search karo. Yeh ek Unit hai jiske liye tum directly fail ho sakte ho agar skip kiya.
+  </div>
+</div>
+
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('syllabus')">📚 Syllabus</button>
+    <button class="tab-btn" onclick="showTab('videos')">🎥 Video Map</button>
+    <button class="tab-btn" onclick="showTab('pyq')">📋 PYQ Analysis</button>
+    <button class="tab-btn" onclick="showTab('missing')">❌ Gaps</button>
+    <button class="tab-btn" onclick="showTab('strategy')">⚡ Strategy</button>
+    <button class="tab-btn" onclick="showTab('predict')">🔮 Predictions</button>
+    <button class="tab-btn" onclick="showTab('checklist')">✅ Checklist</button>
+    <button class="tab-btn" onclick="showTab('formulas')">🧮 Formulas</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ════════════════════════════════════ SYLLABUS TAB ════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-syllabus">
+  <div class="sec-title">Unit-wise Syllabus Breakdown</div>
+
+  <div class="unit-grid">
+
+    <!-- UNIT 1 -->
+    <div class="unit-card">
+      <div class="unit-header" onclick="toggleUnit(this)">
+        <span class="unit-num">UNIT 1</span>
+        <span class="unit-title">Introduction to Computer Networks</span>
+        <span class="unit-hrs">1 hr · ⭐ Low</span>
+        <span style="color:var(--muted);font-size:0.8rem;margin-left:8px">▼</span>
+      </div>
+      <div class="unit-body">
+        <ul class="unit-topics">
+          <li>🌐 Objective & Scope of CN <span class="badge badge-low">LOW</span></li>
+          <li>🗂 Types of Networks (LAN, MAN, WAN) <span class="badge badge-med">MED</span></li>
+          <li>🖥 Network Topologies <span class="badge badge-low">LOW</span></li>
+          <li>📡 OSI Model & TCP/IP <span class="badge badge-med">MED</span></li>
+          <li>🔗 Layering Concepts <span class="badge badge-med">MED</span></li>
+        </ul>
+        <p style="font-size:0.78rem;color:var(--muted)">🎥 Covered in: Videos 1, 2, 3, 4 · Coverage: <strong style="color:var(--green)">90%</strong></p>
+      </div>
+    </div>
+
+    <!-- UNIT 2 -->
+    <div class="unit-card" style="border-color:rgba(239,68,68,0.3)">
+      <div class="unit-header" onclick="toggleUnit(this)" style="background:rgba(239,68,68,0.05)">
+        <span class="unit-num" style="color:#f87171;background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3)">UNIT 2</span>
+        <span class="unit-title">Queuing Theory 🚨</span>
+        <span class="unit-hrs">7 hrs · ⭐⭐⭐ CRITICAL</span>
+        <span style="color:var(--muted);font-size:0.8rem;margin-left:8px">▼</span>
+      </div>
+      <div class="unit-body">
+        <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:0.6rem 0.9rem;margin-bottom:0.8rem;font-size:0.8rem;color:#f87171">
+          ⛔ <strong>NOT IN PLAYLIST</strong> — Find on YouTube separately: "Queuing Theory Computer Networks Hindi" by Neso Academy / Knowledge Gate
+        </div>
+        <ul class="unit-topics">
+          <li>📊 Pure Birth Process <span class="badge badge-high">HIGH</span></li>
+          <li>📊 Pure Death Process <span class="badge badge-high">HIGH</span></li>
+          <li>📊 Birth-Death Process <span class="badge badge-crit">🔥 EVERY PAPER</span></li>
+          <li>📊 M/M/1 Queue Model <span class="badge badge-crit">🔥 EVERY PAPER</span></li>
+          <li>📊 M/M/∞ Queue <span class="badge badge-med">MED</span></li>
+          <li>📊 M/M/m Queue <span class="badge badge-high">HIGH</span></li>
+          <li>📊 M/M/1/K Queue <span class="badge badge-high">HIGH</span></li>
+          <li>📊 M/M/m/m Queue <span class="badge badge-med">MED</span></li>
+          <li>📊 Little's Formula: L = λW <span class="badge badge-crit">🔥 EVERY PAPER</span></li>
+        </ul>
+        <div class="progress-bar"><div class="progress-fill" style="width:5%;background:var(--red)"></div></div>
+        <p style="font-size:0.75rem;color:var(--red);margin-top:4px">🎥 Coverage: 5% (NO dedicated video in playlist)</p>
+      </div>
+    </div>
+
+    <!-- UNIT 3 -->
+    <div class="unit-card">
+      <div class="unit-header" onclick="toggleUnit(this)">
+        <span class="unit-num">UNIT 3</span>
+        <span class="unit-title">Computer Networks & Internet (Application Layer)</span>
+        <span class="unit-hrs">9 hrs · ⭐⭐⭐ High</span>
+        <span style="color:var(--muted);font-size:0.8rem;margin-left:8px">▼</span>
+      </div>
+      <div class="unit-body">
+        <ul class="unit-topics">
+          <li>🌐 WWW & Web Basics <span class="badge badge-med">MED</span></li>
+          <li>🌐 HTTP / HTTPS <span class="badge badge-high">HIGH</span></li>
+          <li>📁 FTP (File Transfer Protocol) <span class="badge badge-high">HIGH</span></li>
+          <li>📧 Email (SMTP, POP3, IMAP) <span class="badge badge-high">HIGH</span></li>
+          <li>🔠 DNS & DNS types <span class="badge badge-high">HIGH</span></li>
+          <li>🤝 Peer-to-Peer (P2P) <span class="badge badge-med">MED</span></li>
+          <li>🔌 Socket Programming <span class="badge badge-med">MED</span></li>
+          <li>⛓ Layering Concepts <span class="badge badge-med">MED</span></li>
+          <li>📦 Packet Switching <span class="badge badge-high">HIGH</span></li>
+          <li>⛔ Blocking in Packet Switches <span class="badge badge-med">MED</span></li>
+          <li>🔮 3 Generations of Packet Switches <span class="badge badge-med">MED</span></li>
+          <li>🔀 Switch Fabric <span class="badge badge-low">LOW</span></li>
+          <li>📥 Buffering <span class="badge badge-med">MED</span></li>
+          <li>📢 Multicasting & Statistical Multiplexing <span class="badge badge-high">HIGH</span></li>
+        </ul>
+        <div class="progress-bar"><div class="progress-fill" style="width:75%;background:var(--gold)"></div></div>
+        <p style="font-size:0.75rem;color:var(--gold);margin-top:4px">🎥 Covered in: Videos 17–21, 77–82, 93, 101 · Coverage: ~75%</p>
+      </div>
+    </div>
+
+    <!-- UNIT 4 -->
+    <div class="unit-card">
+      <div class="unit-header" onclick="toggleUnit(this)">
+        <span class="unit-num">UNIT 4</span>
+        <span class="unit-title">Transport Layer</span>
+        <span class="unit-hrs">9 hrs · ⭐⭐⭐ High</span>
+        <span style="color:var(--muted);font-size:0.8rem;margin-left:8px">▼</span>
+      </div>
+      <div class="unit-body">
+        <ul class="unit-topics">
+          <li>📡 UDP (User Datagram Protocol) <span class="badge badge-high">HIGH</span></li>
+          <li>📡 TCP Header & Services <span class="badge badge-crit">🔥 EVERY PAPER</span></li>
+          <li>🤝 TCP Connection Setup & Teardown <span class="badge badge-high">HIGH</span></li>
+          <li>📲 Connection-Oriented vs Connectionless <span class="badge badge-med">MED</span></li>
+          <li>📞 Remote Procedure Call (RPC) <span class="badge badge-med">MED</span></li>
+          <li>🚦 Congestion Control <span class="badge badge-high">HIGH</span></li>
+          <li>📊 Resource Allocation & Queuing Disciplines <span class="badge badge-med">MED</span></li>
+          <li>🌊 TCP Congestion Control (Slow Start, AIMD) <span class="badge badge-high">HIGH</span></li>
+          <li>🛡 Congestion Avoidance Mechanisms <span class="badge badge-high">HIGH</span></li>
+          <li>🎯 Quality of Service (QoS) <span class="badge badge-high">HIGH</span></li>
+          <li>🪣 Leaky Bucket Algorithm <span class="badge badge-high">HIGH</span></li>
+          <li>🪣 Token Bucket Algorithm <span class="badge badge-med">MED</span></li>
+        </ul>
+        <div class="progress-bar"><div class="progress-fill" style="width:80%;background:var(--green)"></div></div>
+        <p style="font-size:0.75rem;color:var(--green);margin-top:4px">🎥 Covered in: Videos 64–74 · Coverage: ~80%</p>
+      </div>
+    </div>
+
+    <!-- UNIT 5 -->
+    <div class="unit-card">
+      <div class="unit-header" onclick="toggleUnit(this)">
+        <span class="unit-num">UNIT 5</span>
+        <span class="unit-title">Network Layer</span>
+        <span class="unit-hrs">7 hrs · ⭐⭐⭐ High</span>
+        <span style="color:var(--muted);font-size:0.8rem;margin-left:8px">▼</span>
+      </div>
+      <div class="unit-body">
+        <ul class="unit-topics">
+          <li>🔀 Virtual Circuit & Datagram Networks <span class="badge badge-high">HIGH</span></li>
+          <li>🔁 Router Working <span class="badge badge-high">HIGH</span></li>
+          <li>📋 Internet Protocol (IPv4 Header) <span class="badge badge-crit">🔥 EVERY PAPER</span></li>
+          <li>🔢 IP Addressing (Class A, B, C, D, E) <span class="badge badge-high">HIGH</span></li>
+          <li>✂️ Subnetting & VLSM <span class="badge badge-high">HIGH</span></li>
+          <li>🌐 CIDR (Classless Addressing) <span class="badge badge-high">HIGH</span></li>
+          <li>🔢 IPv6 & IPv4 vs IPv6 <span class="badge badge-high">HIGH</span></li>
+          <li>✂️ Fragmentation <span class="badge badge-high">HIGH</span></li>
+          <li>🗺 Distance Vector Routing <span class="badge badge-high">HIGH</span></li>
+          <li>🗺 Link State Routing (Dijkstra) <span class="badge badge-crit">🔥 EVERY PAPER</span></li>
+          <li>🗺 Count-to-Infinity Problem <span class="badge badge-med">MED</span></li>
+          <li>🔁 ARP & NAT <span class="badge badge-med">MED</span></li>
+          <li>📢 Broadcast Routing <span class="badge badge-high">HIGH</span></li>
+          <li>📢 Multicast Routing <span class="badge badge-high">HIGH</span></li>
+          <li>🔀 Adaptive vs Non-Adaptive Routing <span class="badge badge-high">HIGH</span></li>
+          <li>🔀 Bellman-Ford Algorithm <span class="badge badge-med">MED</span></li>
+        </ul>
+        <div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--green)"></div></div>
+        <p style="font-size:0.75rem;color:var(--green);margin-top:4px">🎥 Covered in: Videos 41–63, 91, 104 · Coverage: ~90%</p>
+      </div>
+    </div>
+
+    <!-- UNIT 6 -->
+    <div class="unit-card">
+      <div class="unit-header" onclick="toggleUnit(this)">
+        <span class="unit-num">UNIT 6</span>
+        <span class="unit-title">Link Layer</span>
+        <span class="unit-hrs">7 hrs · ⭐⭐⭐ High</span>
+        <span style="color:var(--muted);font-size:0.8rem;margin-left:8px">▼</span>
+      </div>
+      <div class="unit-body">
+        <ul class="unit-topics">
+          <li>📻 Pure ALOHA & Slotted ALOHA <span class="badge badge-crit">🔥 EVERY PAPER</span></li>
+          <li>📻 CSMA, CSMA/CD, CSMA/CA <span class="badge badge-high">HIGH</span></li>
+          <li>📶 MAC Protocols Overview <span class="badge badge-high">HIGH</span></li>
+          <li>🖧 IEEE 802.3 (Ethernet) <span class="badge badge-high">HIGH</span></li>
+          <li>🖧 IEEE 802.5 (Token Ring) <span class="badge badge-med">MED</span></li>
+          <li>🖧 IEEE 802.11 (Wi-Fi) <span class="badge badge-med">MED</span></li>
+          <li>🔗 Framing (Bit & Byte Stuffing) <span class="badge badge-high">HIGH</span></li>
+          <li>🔍 Error Detection (CRC, Parity, Hamming) <span class="badge badge-high">HIGH</span></li>
+          <li>🔄 ARQ Protocols (Stop & Wait, GBN, SR) <span class="badge badge-med">MED</span></li>
+          <li>🖥 LAN, MAN & Addressing <span class="badge badge-med">MED</span></li>
+          <li>🔀 Hubs, Bridges, Switches <span class="badge badge-crit">🔥 EVERY PAPER</span></li>
+          <li>🔬 SDN (Software Defined Networking) <span class="badge badge-high">HIGH</span></li>
+          <li>🔬 OpenFlow <span class="badge badge-med">MED</span></li>
+          <li>🔗 HDLC Protocol <span class="badge badge-med">MED</span></li>
+        </ul>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%;background:var(--green)"></div></div>
+        <p style="font-size:0.75rem;color:var(--green);margin-top:4px">🎥 Covered in: Videos 22–40 · SDN: Video 93 (partial) · Coverage: ~85%</p>
+      </div>
+    </div>
+
+  </div><!-- end unit-grid -->
+
+  <hr class="divider">
+  <div class="sec-title">Overall Syllabus Coverage by Unit</div>
+  <div class="table-wrap">
+    <table class="cov-table">
+      <thead><tr><th>Unit</th><th>Topic</th><th>Coverage %</th><th>PYQ Frequency</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pyq-year">U1</span></td><td>Introduction & Overview</td><td><div class="cov-bar"><div class="cov-fill" style="width:90%;background:var(--green)"></div></div><small style="color:var(--green)">90%</small></td><td>Low</td><td><span class="badge badge-low">⭐ LOW</span></td></tr>
+        <tr><td><span class="pyq-year" style="color:#f87171;background:rgba(239,68,68,0.1)">U2</span></td><td>Queuing Theory</td><td><div class="cov-bar"><div class="cov-fill" style="width:5%;background:var(--red)"></div></div><small style="color:var(--red)">5% ⚠️</small></td><td>EVERY PAPER</td><td><span class="badge badge-crit">🔥 CRITICAL</span></td></tr>
+        <tr><td><span class="pyq-year">U3</span></td><td>Application Layer & Switching</td><td><div class="cov-bar"><div class="cov-fill" style="width:75%;background:var(--gold)"></div></div><small style="color:var(--gold)">75%</small></td><td>High</td><td><span class="badge badge-high">⭐⭐⭐ HIGH</span></td></tr>
+        <tr><td><span class="pyq-year">U4</span></td><td>Transport Layer</td><td><div class="cov-bar"><div class="cov-fill" style="width:80%;background:var(--green)"></div></div><small style="color:var(--green)">80%</small></td><td>High</td><td><span class="badge badge-high">⭐⭐⭐ HIGH</span></td></tr>
+        <tr><td><span class="pyq-year">U5</span></td><td>Network Layer</td><td><div class="cov-bar"><div class="cov-fill" style="width:90%;background:var(--green)"></div></div><small style="color:var(--green)">90%</small></td><td>Very High</td><td><span class="badge badge-high">⭐⭐⭐ HIGH</span></td></tr>
+        <tr><td><span class="pyq-year">U6</span></td><td>Link Layer</td><td><div class="cov-bar"><div class="cov-fill" style="width:85%;background:var(--green)"></div></div><small style="color:var(--green)">85%</small></td><td>Very High</td><td><span class="badge badge-high">⭐⭐⭐ HIGH</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════ VIDEO MAP TAB ════════════════════════════════════ -->
+<div class="tab-panel" id="tab-videos">
+  <div class="vt-header">
+    <div class="sec-title" style="margin-bottom:0">YouTube Playlist Map (105 Videos)</div>
+    <div class="vt-progress" id="vt-count">0 / 105 watched</div>
+  </div>
+  <div class="progress-bar" style="margin-bottom:1.2rem"><div class="progress-fill" id="vt-progress-bar" style="width:0%;background:var(--accent)"></div></div>
+
+  <!-- UNIT 1 VIDEOS -->
+  <div class="sec-title">📘 Introduction & Overview (Videos 1–4)</div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>✓</th><th>#</th><th>Video Title</th><th>Unit</th><th>PYQ?</th><th>Priority</th><th>Action</th></tr></thead>
+    <tbody id="vid-u1">
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,1)"></td><td class="pyq-year">1</td><td>Full Syllabus Overview</td><td>U1</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,2)"></td><td class="pyq-year">2</td><td>Intro to CN + OSI Model</td><td>U1</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-med">MED</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,3)"></td><td class="pyq-year">3</td><td>LAN, MAN, WAN, PAN, CAN</td><td>U1</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-med">MED</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,4)"></td><td class="pyq-year">4</td><td>TCP/IP Protocol Suite</td><td>U1,U3</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-med">MED</span></td><td class="rec-watch">Watch</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- PHYSICAL LAYER VIDEOS -->
+  <div class="sec-title">🔌 Physical Layer Devices (Videos 5–16) <span style="font-size:0.75rem;color:var(--muted);font-weight:400;font-family:'DM Sans',sans-serif">→ Feeds Unit 6 (Devices section)</span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>✓</th><th>#</th><th>Video Title</th><th>Maps To</th><th>PYQ?</th><th>Priority</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,5)"></td><td class="pyq-year">5</td><td>Physical Layer Functions</td><td>U6 (context)</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,6)"></td><td class="pyq-year">6</td><td>Topologies Part 1</td><td>U1</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,7)"></td><td class="pyq-year">7</td><td>Topologies Part 2</td><td>U1</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,8)"></td><td class="pyq-year">8</td><td>Manchester Encoding</td><td>Physical</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,9)"></td><td class="pyq-year">9</td><td>Various Devices Overview</td><td>U6</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,10)"></td><td class="pyq-year">10</td><td>Types of Cables</td><td>Physical</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,11)"></td><td class="pyq-year">11</td><td>Repeaters</td><td>U6</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,12)"></td><td class="pyq-year">12</td><td>Hub in CN</td><td>U6</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,13)"></td><td class="pyq-year">13</td><td>Bridges in CN</td><td>U6</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,14)"></td><td class="pyq-year">14</td><td>Switch vs Hub vs Bridge</td><td>U6</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,15)"></td><td class="pyq-year">15</td><td>Routers in CN</td><td>U5,U6</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,16)"></td><td class="pyq-year">16</td><td>Collision vs Broadcast Domain</td><td>U6</td><td>—</td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- SWITCHING -->
+  <div class="sec-title">🔀 Switching (Videos 17–21) → Unit 3</div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>✓</th><th>#</th><th>Video Title</th><th>PYQ?</th><th>Priority</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,17)"></td><td class="pyq-year">17</td><td>Circuit Switching</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,18)"></td><td class="pyq-year">18</td><td>Packet Switching</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,19)"></td><td class="pyq-year">19</td><td>Datagram vs Virtual Circuit Switching</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,20)"></td><td class="pyq-year">20</td><td>Message Switching</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,21)"></td><td class="pyq-year">21</td><td>Unicast, Broadcast, Multicast</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- DATA LINK LAYER -->
+  <div class="sec-title">🔗 Data Link Layer (Videos 22–40) → Unit 6</div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>✓</th><th>#</th><th>Video Title</th><th>PYQ?</th><th>Priority</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,22)"></td><td class="pyq-year">22</td><td>Data Link Layer Responsibilities</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,23)"></td><td class="pyq-year">23</td><td>Stop & Wait ARQ</td><td>—</td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,24)"></td><td class="pyq-year">24</td><td>Go-Back-N ARQ</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,25)"></td><td class="pyq-year">25</td><td>Selective Repeat ARQ</td><td>—</td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,26)"></td><td class="pyq-year">26</td><td>All Flow Control Protocols (summary)</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch 💎</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,27)"></td><td class="pyq-year">27</td><td>Framing — Bit & Byte Stuffing</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,28)"></td><td class="pyq-year">28</td><td>Error Detection & Correction Intro</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,29)"></td><td class="pyq-year">29</td><td>Single Bit Parity + Hamming Distance</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,30)"></td><td class="pyq-year">30</td><td>CRC (Cyclic Redundancy Check)</td><td>—</td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,31)"></td><td class="pyq-year">31</td><td>Hamming Code</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,32)"></td><td class="pyq-year">32</td><td>MAC Protocols Overview</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch 💎</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,33)"></td><td class="pyq-year">33</td><td>Pure ALOHA</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,34)"></td><td class="pyq-year">34</td><td>Pure Aloha vs Slotted Aloha</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,35)"></td><td class="pyq-year">35</td><td>CSMA in CN</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,36)"></td><td class="pyq-year">36</td><td>CSMA/CD</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,37)"></td><td class="pyq-year">37</td><td>CSMA/CA</td><td>—</td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,38)"></td><td class="pyq-year">38</td><td>GATE Q on CSMA/CD</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,39)"></td><td class="pyq-year">39</td><td>Ethernet Frame Format (IEEE 802.3)</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,40)"></td><td class="pyq-year">40</td><td>Token Ring (IEEE 802.5)</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- NETWORK LAYER -->
+  <div class="sec-title">🌐 Network Layer (Videos 41–63) → Unit 5</div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>✓</th><th>#</th><th>Video Title</th><th>PYQ?</th><th>Priority</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,41)"></td><td class="pyq-year">41</td><td>Network Layer Responsibilities</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,42)"></td><td class="pyq-year">42</td><td>Class A IP Addressing</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,43)"></td><td class="pyq-year">43</td><td>Class B IP Addressing</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,44)"></td><td class="pyq-year">44</td><td>Class C IP Addressing</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,45)"></td><td class="pyq-year">45</td><td>Class D & E</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,46)"></td><td class="pyq-year">46</td><td>Range, Network ID, Broadcast Address</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch 💎</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,47)"></td><td class="pyq-year">47</td><td>Disadvantages of Classful Addressing</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,48)"></td><td class="pyq-year">48</td><td>CIDR / Classless Addressing</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,49)"></td><td class="pyq-year">49</td><td>Subnetting in Classful Addressing</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,50)"></td><td class="pyq-year">50</td><td>VLSM</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,51)"></td><td class="pyq-year">51</td><td>Subnetting in CIDR</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,52)"></td><td class="pyq-year">52</td><td>Numerical on CIDR</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch 💎</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,53)"></td><td class="pyq-year">53</td><td>VLSM in Classless (CIDR)</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,54)"></td><td class="pyq-year">54</td><td>IPv4 Header Format</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,55)"></td><td class="pyq-year">55</td><td>IPv4 Fragmentation</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,56)"></td><td class="pyq-year">56</td><td>IPv4 Options & Padding</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,57)"></td><td class="pyq-year">57</td><td>IPv6 Header + IPv4 vs IPv6</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,58)"></td><td class="pyq-year">58</td><td>Routing Protocols Types</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,59)"></td><td class="pyq-year">59</td><td>Distance Vector Routing</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,60)"></td><td class="pyq-year">60</td><td>Count-to-Infinity Problem</td><td>—</td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,61)"></td><td class="pyq-year">61</td><td>Link State Routing (Dijkstra)</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch 💎</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,62)"></td><td class="pyq-year">62</td><td>ARP Explained</td><td>—</td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,63)"></td><td class="pyq-year">63</td><td>NAT Explained</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- TRANSPORT LAYER -->
+  <div class="sec-title">📡 Transport Layer (Videos 64–74) → Unit 4</div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>✓</th><th>#</th><th>Video Title</th><th>PYQ?</th><th>Priority</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,64)"></td><td class="pyq-year">64</td><td>Transport Layer Responsibilities</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,65)"></td><td class="pyq-year">65</td><td>Socket Address (IP + Port)</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,66)"></td><td class="pyq-year">66</td><td>TCP Header Part 1</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,67)"></td><td class="pyq-year">67</td><td>TCP Header Part 2</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,68)"></td><td class="pyq-year">68</td><td>TCP Connection Establish & Terminate</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,69)"></td><td class="pyq-year">69</td><td>TCP Data Transfer & Piggybacking</td><td>—</td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,70)"></td><td class="pyq-year">70</td><td>TCP Connection Termination</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,71)"></td><td class="pyq-year">71</td><td>TCP Congestion Control</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch 💎</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,72)"></td><td class="pyq-year">72</td><td>UDP Header</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,73)"></td><td class="pyq-year">73</td><td>Advantages of UDP over TCP</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,74)"></td><td class="pyq-year">74</td><td>TCP vs UDP Comparison</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch 💎</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- APPLICATION LAYER + MISC -->
+  <div class="sec-title">🌐 Application Layer (Videos 75–82+) → Unit 3</div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>✓</th><th>#</th><th>Video Title</th><th>PYQ?</th><th>Priority</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,75)"></td><td class="pyq-year">75</td><td>Session Layer (NOT in syllabus)</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,76)"></td><td class="pyq-year">76</td><td>Presentation Layer (NOT in syllabus)</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,77)"></td><td class="pyq-year">77</td><td>Application Layer + Port Numbers</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,78)"></td><td class="pyq-year">78</td><td>DNS in Computer Networks</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,79)"></td><td class="pyq-year">79</td><td>DNS Server & Types</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,80)"></td><td class="pyq-year">80</td><td>HTTP, FTP, SMTP, POP</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-crit">🔥 CRITICAL</span></td><td class="rec-watch">Watch 💎</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,81)"></td><td class="pyq-year">81</td><td>Persistent vs Non-Persistent HTTP</td><td>—</td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,82)"></td><td class="pyq-year">82</td><td>SMTP vs POP3 vs IMAP</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,83)"></td><td class="pyq-year">83</td><td>Cryptography (not in unit syllabus)</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,84)"></td><td class="pyq-year">84</td><td>Symmetric Key Cryptography</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,85)"></td><td class="pyq-year">85</td><td>Imp Q on Network Security</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,86)"></td><td class="pyq-year">86</td><td>Asymmetric Key Cryptography</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,87)"></td><td class="pyq-year">87</td><td>RSA Algorithm</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,88)"></td><td class="pyq-year">88</td><td>Firewalls (Packet Filtering)</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,89)"></td><td class="pyq-year">89</td><td>Application Firewall</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,90)"></td><td class="pyq-year">90</td><td>3 Imp CN Questions (summary)</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,91)"></td><td class="pyq-year">91</td><td>Summary All Protocols (All layers)</td><td>—</td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch 💎 (Revision)</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,92)"></td><td class="pyq-year">92</td><td>Linux Network Commands</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,93)"></td><td class="pyq-year">93</td><td>Socket Programming</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,94)"></td><td class="pyq-year">94</td><td>Need of IPv6</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,95)"></td><td class="pyq-year">95</td><td>IPSec Protocol</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,96)"></td><td class="pyq-year">96</td><td>Transport vs Tunnel Mode IPSec</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,97)"></td><td class="pyq-year">97</td><td>Basics of Communication</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,98)"></td><td class="pyq-year">98</td><td>Bandwidth vs Throughput vs Latency</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,99)"></td><td class="pyq-year">99</td><td>Fast Ethernet vs Gigabit Ethernet</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,100)"></td><td class="pyq-year">100</td><td>Ping & Loopback</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,101)"></td><td class="pyq-year">101</td><td>TCP/IP Suite with Real Life Examples</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-med">MED</span></td><td class="rec-2x">2× Speed</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,102)"></td><td class="pyq-year">102</td><td>IPsec vs SSH vs SSL/TLS</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,103)"></td><td class="pyq-year">103</td><td>VPN — How it Works</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,104)"></td><td class="pyq-year">104</td><td>CIDR Addressing (Extra)</td><td><span class="covered-yes">✓</span></td><td><span class="badge badge-high">HIGH</span></td><td class="rec-watch">Watch (practice)</td></tr>
+      <tr><td><input type="checkbox" class="vid-check" onchange="updateVidProgress(this,105)"></td><td class="pyq-year">105</td><td>HTTP vs HTTPS</td><td>—</td><td><span class="badge badge-low">LOW</span></td><td class="rec-skip">Skip</td></tr>
+    </tbody>
+  </table></div>
+
+  <div style="background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.2);border-radius:10px;padding:1rem;font-size:0.82rem;margin-top:1rem">
+    <strong style="color:var(--cyan)">💎 Hidden Gems (Must Watch):</strong> Videos 26 (all flow control), 32 (MAC protocols overview), 52 (CIDR numericals), 61 (Dijkstra), 71 (TCP congestion), 74 (TCP vs UDP), 80 (HTTP/FTP/SMTP), 91 (all protocols summary). These 8 videos cover a huge chunk of PYQs.
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════ PYQ TAB ════════════════════════════════════ -->
+<div class="tab-panel" id="tab-pyq">
+  <div class="sec-title">PYQ Analysis (2022–2025) — All Papers</div>
+
+  <div class="table-wrap" style="margin-bottom:1.5rem">
+    <table>
+      <thead><tr><th>Year/Paper</th><th>Part</th><th>Question</th><th>Topic</th><th>Unit</th><th>Marks</th><th>Video</th></tr></thead>
+      <tbody>
+        <!-- 2022 -->
+        <tr style="background:rgba(99,102,241,0.04)"><td colspan="7" style="padding:0.4rem 0.8rem;font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--accent2)">📋 2022 — Main/Back (6E1592)</td></tr>
+        <tr><td><span class="pyq-year">2022</span></td><td><span class="pyq-part">A</span></td><td>Define Computer Network, Node, Router, HUB, LAN vs WAN, DNS, Multiple Access, Packet Switching, RPC</td><td><span class="pyq-topic-tag">Basics</span><span class="pyq-topic-tag">DNS</span></td><td>U1,U3,U4,U6</td><td><span class="pyq-marks">2×10</span></td><td>2,9,15,78</td></tr>
+        <tr><td><span class="pyq-year">2022</span></td><td><span class="pyq-part">B</span></td><td>P2P file distribution; TCP segments; Multicasting & Statistical Multicasting; Leaky Bucket; App layer; Flow vs Error control; Multiple Access</td><td><span class="pyq-topic-tag">TCP</span><span class="pyq-topic-tag">Leaky Bucket</span><span class="pyq-topic-tag">MAC</span></td><td>U3,U4,U6</td><td><span class="pyq-marks">8×5</span></td><td>66,71,32</td></tr>
+        <tr><td><span class="pyq-year">2022</span></td><td><span class="pyq-part">C</span></td><td>Pure Aloha + CSMA/CD + Ethernet; Network devices; Static vs Dynamic + Dijkstra; <strong>Birth-Death steady state</strong>; IEEE 802 + Resource Allocation + Broadcast/Multicast</td><td><span class="pyq-topic-tag">ALOHA</span><span class="pyq-topic-tag">Dijkstra</span><span class="pyq-topic-tag">🔥 Queuing</span></td><td>U2,U5,U6</td><td><span class="pyq-marks">15×4</span></td><td>33,36,61 | ⚠️ No video for U2</td></tr>
+
+        <!-- 2023 BACK -->
+        <tr style="background:rgba(99,102,241,0.04)"><td colspan="7" style="padding:0.4rem 0.8rem;font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--accent2)">📋 2023 — Back (6E1592)</td></tr>
+        <tr><td><span class="pyq-year">2023 B</span></td><td><span class="pyq-part">A</span></td><td>Queuing Theory; Client-server vs P2P; WWW; IP address; Transport layer; QoS; Routers; Virtual circuit; 802.3; ALOHA</td><td><span class="pyq-topic-tag">🔥 Queuing</span><span class="pyq-topic-tag">IP</span><span class="pyq-topic-tag">ALOHA</span></td><td>U2,U3,U5,U6</td><td><span class="pyq-marks">2×10</span></td><td>41,33 | ⚠️ No U2 video</td></tr>
+        <tr><td><span class="pyq-year">2023 B</span></td><td><span class="pyq-part">B</span></td><td><strong>Little's formula</strong>; IPv4 vs IPv6; <strong>M/M/1/K Queue</strong>; FTP; Blocking in packet switches; TCP vs UDP; DNS poisoning</td><td><span class="pyq-topic-tag">🔥 Little's</span><span class="pyq-topic-tag">🔥 M/M/1/K</span><span class="pyq-topic-tag">DNS</span></td><td>U2,U3,U4</td><td><span class="pyq-marks">8×5</span></td><td>57,74,78 | ⚠️ No U2 video</td></tr>
+        <tr><td><span class="pyq-year">2023 B</span></td><td><span class="pyq-part">C</span></td><td>Queuing calculation (line utilization, chars waiting); Slotted ALOHA throughput + CSMA; Multicast routing + Congestion Avoidance; Adaptive vs non-adaptive; Token bucket vs Leaky bucket + Token Ring</td><td><span class="pyq-topic-tag">🔥 Queuing Numerical</span><span class="pyq-topic-tag">ALOHA</span><span class="pyq-topic-tag">Routing</span></td><td>U2,U4,U5,U6</td><td><span class="pyq-marks">15×4</span></td><td>34,58 | ⚠️ No U2 video</td></tr>
+
+        <!-- 2023 MAIN -->
+        <tr style="background:rgba(99,102,241,0.04)"><td colspan="7" style="padding:0.4rem 0.8rem;font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--accent2)">📋 2023 — Main (6E7152)</td></tr>
+        <tr><td><span class="pyq-year">2023 M</span></td><td><span class="pyq-part">A</span></td><td>Birth-death process; Adaptive/non-adaptive routing; Multiplexing types; OSI layers; Connectionless network; Multicast routing; MAC; LAN vs WAN; Congestion control; DNS</td><td><span class="pyq-topic-tag">🔥 Birth-Death</span><span class="pyq-topic-tag">Routing</span><span class="pyq-topic-tag">MAC</span></td><td>U2,U5,U6</td><td><span class="pyq-marks">2×10</span></td><td>58,32,78</td></tr>
+        <tr><td><span class="pyq-year">2023 M</span></td><td><span class="pyq-part">B</span></td><td>IPv4 header; Bit stuffing; TCP header; IP address classes; IEEE 802.3; SDN + HTTP; QoS parameters</td><td><span class="pyq-topic-tag">IPv4</span><span class="pyq-topic-tag">TCP</span><span class="pyq-topic-tag">SDN</span></td><td>U3,U4,U5,U6</td><td><span class="pyq-marks">4×5</span></td><td>54,27,66,39</td></tr>
+        <tr><td><span class="pyq-year">2023 M</span></td><td><span class="pyq-part">C</span></td><td>Hubs, Bridges, Switches, Routers; Subnet diagram (4 subnets); <strong>Dijkstra on graph</strong>; Leaky bucket; <strong>M/M/1 queuing</strong></td><td><span class="pyq-topic-tag">Devices</span><span class="pyq-topic-tag">Dijkstra</span><span class="pyq-topic-tag">🔥 M/M/1</span></td><td>U2,U5,U6</td><td><span class="pyq-marks">10×3</span></td><td>14,61 | ⚠️ No U2 video</td></tr>
+
+        <!-- 2024 BACK -->
+        <tr style="background:rgba(99,102,241,0.04)"><td colspan="7" style="padding:0.4rem 0.8rem;font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--accent2)">📋 2024 — Back (6E1592)</td></tr>
+        <tr><td><span class="pyq-year">2024 B</span></td><td><span class="pyq-part">A</span></td><td>Adaptive vs non-adaptive; Bit & Byte stuffing; Multiplexing types; <strong>Little's formula</strong>; Resource allocation; Buffering; Connection-oriented; Socket; LAN</td><td><span class="pyq-topic-tag">🔥 Little's</span><span class="pyq-topic-tag">Buffering</span></td><td>U2,U3,U6</td><td><span class="pyq-marks">2×10</span></td><td>27 | ⚠️ No U2</td></tr>
+        <tr><td><span class="pyq-year">2024 B</span></td><td><span class="pyq-part">B</span></td><td>TCP control protocol + header; Ethernet; HTTP; Virtual circuit vs datagram; OSI model; QoS; MAC protocols</td><td><span class="pyq-topic-tag">TCP</span><span class="pyq-topic-tag">Ethernet</span></td><td>U3,U4,U5,U6</td><td><span class="pyq-marks">8×5</span></td><td>66,39,80</td></tr>
+        <tr><td><span class="pyq-year">2024 B</span></td><td><span class="pyq-part">C</span></td><td>Congestion control algorithms; Network devices; <strong>M/M/1 queuing</strong>; Bellman-Ford routing; CSMA protocols</td><td><span class="pyq-topic-tag">Congestion</span><span class="pyq-topic-tag">🔥 M/M/1</span><span class="pyq-topic-tag">Bellman-Ford</span></td><td>U2,U4,U5</td><td><span class="pyq-marks">15×4</span></td><td>71,59 | ⚠️ No U2</td></tr>
+
+        <!-- 2024 MAIN -->
+        <tr style="background:rgba(99,102,241,0.04)"><td colspan="7" style="padding:0.4rem 0.8rem;font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--accent2)">📋 2024 — Main (6E7152)</td></tr>
+        <tr><td><span class="pyq-year">2024 M</span></td><td><span class="pyq-part">A</span></td><td><strong>Little's formula</strong>; Packet vs circuit switching; HTTP; Network layer; MAC; Ethernet; Resource allocation; IPv4 frame; SDN; Fragmentation</td><td><span class="pyq-topic-tag">🔥 Little's</span><span class="pyq-topic-tag">SDN</span></td><td>U2,U3,U4,U5,U6</td><td><span class="pyq-marks">2×10</span></td><td>54,55 | ⚠️ No U2</td></tr>
+        <tr><td><span class="pyq-year">2024 M</span></td><td><span class="pyq-part">B</span></td><td>Congestion control vs routing; HDLC; Fair queuing + weighted fair queuing; Congestion control flow chart; Network devices; ATM frame; Token Ring</td><td><span class="pyq-topic-tag">HDLC</span><span class="pyq-topic-tag">Fair Queuing</span></td><td>U4,U6</td><td><span class="pyq-marks">4×5</span></td><td>40 (partial)</td></tr>
+        <tr><td><span class="pyq-year">2024 M</span></td><td><span class="pyq-part">C</span></td><td>CIDR address aggregation (120,37,49,40 hosts); Go Back-5 sliding window; <strong>M/M/m queuing</strong>; 1-persistent/p-persistent/non-persistent CSMA; Broadcast + Virtual Circuit</td><td><span class="pyq-topic-tag">CIDR</span><span class="pyq-topic-tag">Go-Back-N</span><span class="pyq-topic-tag">🔥 M/M/m</span></td><td>U2,U5,U6</td><td><span class="pyq-marks">10×3</span></td><td>51,24 | ⚠️ No U2</td></tr>
+
+        <!-- 2025 BACK -->
+        <tr style="background:rgba(99,102,241,0.04)"><td colspan="7" style="padding:0.4rem 0.8rem;font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--accent2)">📋 2025 — Back (6E1592)</td></tr>
+        <tr><td><span class="pyq-year">2025 B</span></td><td><span class="pyq-part">A</span></td><td>Queuing system components; <strong>Little's law</strong>; Socket vs port; Fragmentation; Error detection vs correction; Static vs dynamic routing; Slotted vs Pure ALOHA; Circuit vs packet switching; QoS; FTP passive mode</td><td><span class="pyq-topic-tag">🔥 Little's</span><span class="pyq-topic-tag">ALOHA</span><span class="pyq-topic-tag">Routing</span></td><td>U2,U4,U5,U6</td><td><span class="pyq-marks">2×10</span></td><td>34,58</td></tr>
+        <tr><td><span class="pyq-year">2025 B</span></td><td><span class="pyq-part">B</span></td><td><strong>M/M/1 queuing model</strong>; TCP flow control (sliding window); IPv4 vs IPv6; Distance vector vs link-state; CSMA; DNS resolves domain names; SMTP+POP3+IMAP</td><td><span class="pyq-topic-tag">🔥 M/M/1</span><span class="pyq-topic-tag">TCP</span><span class="pyq-topic-tag">DNS</span></td><td>U2,U4,U5</td><td><span class="pyq-marks">8×5</span></td><td>66,57,61,78,82</td></tr>
+        <tr><td><span class="pyq-year">2025 B</span></td><td><span class="pyq-part">C</span></td><td>SPAM attack security; TCP vs UDP; IEEE 802.3 vs 802.11; <strong>RPC working</strong>; MAC addressing in IEEE 802.3</td><td><span class="pyq-topic-tag">Security</span><span class="pyq-topic-tag">TCP vs UDP</span><span class="pyq-topic-tag">RPC</span></td><td>U3,U4,U6</td><td><span class="pyq-marks">15×4</span></td><td>74,39</td></tr>
+
+        <!-- 2025 MAIN -->
+        <tr style="background:rgba(99,102,241,0.04)"><td colspan="7" style="padding:0.4rem 0.8rem;font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--accent2)">📋 2025 — Main (6E7152)</td></tr>
+        <tr><td><span class="pyq-year">2025 M</span></td><td><span class="pyq-part">A</span></td><td><strong>Little Formula</strong>; HTTP; DNS; TCP vs UDP; RPC; Addressing; LAN/WAN/MAN; 802.11; Virtual Circuit; P2P</td><td><span class="pyq-topic-tag">🔥 Little's</span><span class="pyq-topic-tag">DNS</span><span class="pyq-topic-tag">P2P</span></td><td>U2,U3,U4,U6</td><td><span class="pyq-marks">2×10</span></td><td>78,74,80</td></tr>
+        <tr><td><span class="pyq-year">2025 M</span></td><td><span class="pyq-part">B</span></td><td>Application layer + layering; Switching techniques; Resource allocation; Router working; <strong>SDN + 3 components</strong>; OpenFlow; Socket programming</td><td><span class="pyq-topic-tag">SDN</span><span class="pyq-topic-tag">OpenFlow</span><span class="pyq-topic-tag">Router</span></td><td>U3,U4,U5,U6</td><td><span class="pyq-marks">4×5</span></td><td>15,77,93</td></tr>
+        <tr><td><span class="pyq-year">2025 M</span></td><td><span class="pyq-part">C</span></td><td>Queuing Theory + <strong>M/M/1, M/M/m, M/M/m/m</strong>; Packet switching + Buffering + Multicasting + Statistical Multiplexing; TCP Congestion + QoS; Routing + Dijkstra + Broadcast + Multicast; ALOHA + Ethernet + Hub + Switches</td><td><span class="pyq-topic-tag">🔥 All Queuing Models</span><span class="pyq-topic-tag">Dijkstra</span><span class="pyq-topic-tag">ALOHA</span></td><td>U2,U3,U4,U5,U6</td><td><span class="pyq-marks">15×4</span></td><td>33,61,71,39</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec-title">👑 Most Repeated Topics (All Years Combined)</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Rank</th><th>Topic</th><th>Frequency</th><th>Unit</th><th>Must Watch Video</th></tr></thead>
+      <tbody>
+        <tr><td>🥇</td><td><strong>Little's Formula / Queuing Theory</strong></td><td><span class="badge badge-crit">7/7 papers</span></td><td>U2</td><td>⚠️ Not in playlist</td></tr>
+        <tr><td>🥈</td><td><strong>TCP Header + TCP Congestion Control</strong></td><td><span class="badge badge-crit">7/7 papers</span></td><td>U4</td><td>66, 67, 71</td></tr>
+        <tr><td>🥉</td><td><strong>Dijkstra / Routing Algorithms</strong></td><td><span class="badge badge-high">6/7 papers</span></td><td>U5</td><td>61</td></tr>
+        <tr><td>4</td><td>ALOHA (Pure + Slotted)</td><td><span class="badge badge-high">6/7 papers</span></td><td>U6</td><td>33, 34</td></tr>
+        <tr><td>5</td><td>Network Devices (Hub, Bridge, Switch, Router)</td><td><span class="badge badge-high">6/7 papers</span></td><td>U6</td><td>12, 13, 14, 15</td></tr>
+        <tr><td>6</td><td>IPv4 Header + Subnetting/CIDR</td><td><span class="badge badge-high">6/7 papers</span></td><td>U5</td><td>54, 48, 52</td></tr>
+        <tr><td>7</td><td>TCP vs UDP</td><td><span class="badge badge-med">5/7 papers</span></td><td>U4</td><td>74</td></tr>
+        <tr><td>8</td><td>DNS + Application Layer Protocols</td><td><span class="badge badge-med">5/7 papers</span></td><td>U3</td><td>78, 80</td></tr>
+        <tr><td>9</td><td>SDN + OpenFlow</td><td><span class="badge badge-med">4/7 papers</span></td><td>U6</td><td>Partial only</td></tr>
+        <tr><td>10</td><td>CSMA / CSMA-CD</td><td><span class="badge badge-med">4/7 papers</span></td><td>U6</td><td>35, 36</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════ GAPS TAB ════════════════════════════════════ -->
+<div class="tab-panel" id="tab-missing">
+  <div class="sec-title">❌ Missing / Poorly Covered Topics</div>
+  <div class="missing-grid">
+    <div class="missing-card" style="border-color:rgba(239,68,68,0.5)">
+      <h4>🚨 Queuing Theory (ENTIRE UNIT 2)</h4>
+      <p>M/M/1, M/M/m, M/M/1/K, M/M/∞, M/M/m/m models, Birth-Death process, Little's formula — sabse zyada PYQ topic. Playlist mein ZERO dedicated videos.</p>
+      <div class="fix">🔧 Fix: YouTube → "Queuing Theory in Hindi M/M/1" (Knowledge Gate / Neso Academy). Minimum 3-4 videos dekho iske liye specifically.</div>
+    </div>
+    <div class="missing-card">
+      <h4>🪣 Leaky Bucket Algorithm</h4>
+      <p>Congestion control mein aata hai, 2022 aur 2023 dono mein Part B mein aaya. Playlist mein dedicated video nahi.</p>
+      <div class="fix">🔧 Fix: YouTube → "Leaky Bucket Token Bucket Algorithm Hindi" — 1 video kaafi hai (15 min)</div>
+    </div>
+    <div class="missing-card">
+      <h4>🔬 SDN + OpenFlow (Properly)</h4>
+      <p>2023, 2024, 2025 mein repeatedly aaya. Playlist mein mention hai but properly covered nahi in any dedicated video.</p>
+      <div class="fix">🔧 Fix: YouTube → "SDN Software Defined Networking Hindi" — 1 short video. 2025 Main mein Part B mein directly aaya.</div>
+    </div>
+    <div class="missing-card">
+      <h4>📞 RPC (Remote Procedure Call)</h4>
+      <p>2022 Part A, 2025 Back Part C (15 marks), 2025 Main Part A mein aaya. Playlist mein covered nahi properly.</p>
+      <div class="fix">🔧 Fix: YouTube → "Remote Procedure Call RPC with diagram" — 1 video (10 min)</div>
+    </div>
+    <div class="missing-card">
+      <h4>🔀 Bellman-Ford Algorithm</h4>
+      <p>2024 Back Part C mein aaya. Distance vector routing video (59) ke baad seekhna chahiye. Dedicated video nahi.</p>
+      <div class="fix">🔧 Fix: Video 59 (Distance Vector) dekho, phir YouTube → "Bellman Ford Routing Algorithm Hindi" — 1 short video</div>
+    </div>
+    <div class="missing-card">
+      <h4>📊 HDLC Protocol + ATM Frame</h4>
+      <p>2024 Main Part B mein HDLC + ATM frame dono aaye. Playlist mein covered nahi.</p>
+      <div class="fix">🔧 Fix: Low-medium priority. Agar time ho to ek YouTube video dekho. Skip karoge toh chalega mostly.</div>
+    </div>
+    <div class="missing-card">
+      <h4>⚖️ Fair Queuing & Weighted Fair Queuing</h4>
+      <p>2024 Main Part B mein aaya (ATM networks context mein). Playlist mein nahi.</p>
+      <div class="fix">🔧 Fix: Low priority. Short notes se padho. Exam mein optional choice milti hai — avoid karna safe hai.</div>
+    </div>
+    <div class="missing-card">
+      <h4>📦 3 Generations of Packet Switches + Blocking</h4>
+      <p>RTU syllabus Unit 3 mein specifically mention hai. 2023 Back Part B mein "blocking in packet switches" aaya.</p>
+      <div class="fix">🔧 Fix: YouTube → "Three generations packet switches blocking" — 1 video (10 min). Medium priority.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="sec-title">⚠️ Tricky Topics Students Usually Get Wrong</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0.7rem">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:0.8rem;font-size:0.8rem">
+      <strong style="color:var(--gold)">CIDR Address Aggregation</strong><br>
+      <span style="color:var(--muted)">120, 37, 49, 40 hosts problem (2024 Main C1) — log commonly galat address size calculate karte hain. Next power of 2 approach use karo.</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:0.8rem;font-size:0.8rem">
+      <strong style="color:var(--gold)">ALOHA Throughput Formula</strong><br>
+      <span style="color:var(--muted)">Pure ALOHA = 18.4%, Slotted = 36.8% — log formula yaad karte hain but derivation galat karte hain. S = Ge^(-G) formula samjho.</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:0.8rem;font-size:0.8rem">
+      <strong style="color:var(--gold)">Dijkstra vs Bellman-Ford</strong><br>
+      <span style="color:var(--muted)">Dono routing mein confuse karte hain. Dijkstra = shortest path (Link state), Bellman-Ford = distance vector. Table banake practice karo.</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:0.8rem;font-size:0.8rem">
+      <strong style="color:var(--gold)">TCP 3-Way Handshake vs 4-Way Teardown</strong><br>
+      <span style="color:var(--muted)">Connection establish (SYN, SYN-ACK, ACK) aur termination (FIN, ACK, FIN, ACK) mix ho jaata hai. Diagram se yaad karo.</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:0.8rem;font-size:0.8rem">
+      <strong style="color:var(--gold)">M/M/1 vs M/M/m Queuing</strong><br>
+      <span style="color:var(--muted)">M/M/1 mein single server, M/M/m mein m servers. λ/μ = ρ (traffic intensity). Log formulas mix karte hain — U2 properly padho.</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════ STRATEGY TAB ════════════════════════════════════ -->
+<div class="tab-panel" id="tab-strategy">
+  <div class="sec-title">⚡ Smart Study Strategy</div>
+
+  <div class="day-plan">
+    <div class="day-card" style="border-color:rgba(239,68,68,0.3)">
+      <h3>🔥 1 Day Plan (Emergency!)</h3>
+      <div class="day-step"><span class="step-num">1h</span><div class="step-info"><strong>Queuing Theory — YouTube (separate)</strong><span>Little's formula, M/M/1 basics. Ek dedicated video dekho. MUST — har paper mein aata hai.</span></div></div>
+      <div class="day-step"><span class="step-num">30m</span><div class="step-info"><strong>Videos 33+34 — ALOHA</strong><span>Pure ALOHA + Slotted ALOHA. Throughput formula pakko karo.</span></div></div>
+      <div class="day-step"><span class="step-num">30m</span><div class="step-info"><strong>Video 61 — Dijkstra</strong><span>Link state routing. Table banake ek example solve karo.</span></div></div>
+      <div class="day-step"><span class="step-num">30m</span><div class="step-info"><strong>Videos 66+67 — TCP Header</strong><span>Header fields pakko karo. Congestion control ke liye 71 bhi dekho.</span></div></div>
+      <div class="day-step"><span class="step-num">30m</span><div class="step-info"><strong>Video 54 — IPv4 Header</strong><span>Har field explain kar sako aise practice karo.</span></div></div>
+      <div class="day-step"><span class="step-num">20m</span><div class="step-info"><strong>Video 74 — TCP vs UDP</strong><span>Table form mein 10 differences yaad karo.</span></div></div>
+      <div class="day-step"><span class="step-num">20m</span><div class="step-info"><strong>Video 80 — HTTP/FTP/DNS/SMTP</strong><span>Port numbers + basic working. Application layer summary.</span></div></div>
+      <div style="margin-top:0.8rem;padding:0.5rem 0.7rem;background:rgba(239,68,68,0.08);border-radius:6px;font-size:0.75rem;color:#f87171">⛔ Skip: Videos 83–103 (Security/IPSec/VPN — not in syllabus), Videos 7,8,10,11,29,31,38 (low priority topics)</div>
+    </div>
+
+    <div class="day-card" style="border-color:rgba(245,158,11,0.3)">
+      <h3>⚡ 2–3 Day Plan (Optimized)</h3>
+      <div class="day-step"><span class="step-num">Day 1</span><div class="step-info"><strong>Unit 2 (Queuing) + Unit 6 (Link Layer)</strong><span>Morning: External videos for M/M/1, M/M/m, Little's formula | Afternoon: Videos 22, 26, 27, 32, 33, 34, 35, 36, 39</span></div></div>
+      <div class="day-step"><span class="step-num">Day 2</span><div class="step-info"><strong>Unit 5 (Network) + Unit 4 (Transport)</strong><span>Morning: Videos 41, 46, 48, 52, 54, 57, 59, 61 (IP + routing) | Afternoon: Videos 64, 66, 67, 71, 72, 74 (TCP/UDP)</span></div></div>
+      <div class="day-step"><span class="step-num">Day 3</span><div class="step-info"><strong>Unit 3 (App Layer) + Revision + PYQ practice</strong><span>Morning: Videos 17, 18, 19, 21, 78, 80, 82 | Afternoon: PYQ solve karo (at least 2 papers), Leaky bucket + SDN YouTube se</span></div></div>
+      <div style="margin-top:0.8rem;padding:0.5rem 0.7rem;background:rgba(6,182,212,0.08);border-radius:6px;font-size:0.75rem;color:var(--cyan)">💡 Video 91 (All protocols summary) — last mein revision ke liye perfect hai!</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="sec-title">🎯 Exam-Day Strategy</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0.8rem">
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1rem;font-size:0.82rem">
+      <strong style="color:var(--green);display:block;margin-bottom:0.4rem">Part A (10×2 = 20 marks)</strong>
+      Sabhi compulsory hain. Chhote definitions chahiye (25 words max). Focus on: Little's formula, LAN/WAN, DNS, TCP/UDP, ALOHA, Virtual Circuit, Routing types.
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1rem;font-size:0.82rem">
+      <strong style="color:var(--gold);display:block;margin-bottom:0.4rem">Part B (5 out of 7 × 8 = 40 marks)</strong>
+      Choice milti hai. Skip karo: HDLC, ATM, Fair queuing (ye rarely aate hain aur padhe nahi hain). Choose: TCP header, IPv4 vs IPv6, ALOHA throughput, Dijkstra, DNS.
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1rem;font-size:0.82rem">
+      <strong style="color:var(--red);display:block;margin-bottom:0.4rem">Part C (4 out of 5 × 15 = 60 marks)</strong>
+      Highest marks. Queuing numerical ZAROOR aayega. Network devices question (diagram with Hubs/Bridges/Switches/Routers) easy marks hai. CIDR subnetting numerical practice karo.
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="sec-title">🚫 Waste of Time vs 💎 Must Watch</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:10px;padding:1rem">
+      <strong style="color:#f87171;display:block;margin-bottom:0.5rem">🚫 Skip These Videos</strong>
+      <p style="font-size:0.78rem;color:var(--muted)">Videos 7, 8, 10, 11, 29, 31, 38, 63, 70, 73, 75, 76, 83–103 (entire security section) = <strong>~30 videos</strong> jo syllabus se mostly out-of-scope hain ya low PYQ frequency hain.</p>
+    </div>
+    <div style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);border-radius:10px;padding:1rem">
+      <strong style="color:var(--green);display:block;margin-bottom:0.5rem">💎 Top 15 Must Watch</strong>
+      <p style="font-size:0.78rem;color:var(--muted)">26, 32, 33, 34, 35, 36, 39, 48, 52, 54, 61, 66, 71, 74, 80 — ye 15 videos sabse important hain. In 15 videos mein majority PYQ topics cover ho jaate hain.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════ PREDICTIONS TAB ════════════════════════════════════ -->
+<div class="tab-panel" id="tab-predict">
+  <div class="sec-title">🔮 Most Probable Questions (Next Exam Prediction)</div>
+  <div style="background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:0.8rem 1rem;font-size:0.8rem;color:var(--gold);margin-bottom:1.2rem">
+    ⚡ Based on trend analysis of 2022–2025 papers. Topics jo 4+ times repeat hue = Very High chance.
+  </div>
+
+  <div class="pred-grid">
+    <div class="pred-card" style="border-color:rgba(239,68,68,0.3)">
+      <h4><span class="fire">🔥</span> Unit 2 — Queuing Theory</h4>
+      <div class="pred-q"><span class="fire">🔥</span> Derive steady state probabilities for M/M/1 queue. Calculate P(0) and average packets in system.</div>
+      <div class="pred-q"><span class="fire">🔥</span> State and explain Little's formula with example.</div>
+      <div class="pred-q"><span class="fire">🔥</span> Numerical: Given λ (arrival rate) and μ (service rate), find utilization, Lq, Wq for M/M/1.</div>
+      <div class="pred-q">⚡ Explain birth-death process and draw transition diagram.</div>
+      <div class="pred-q">⚡ Compare M/M/1 and M/M/m queuing models.</div>
+    </div>
+
+    <div class="pred-card">
+      <h4><span class="fire">🔥</span> Unit 5 — Network Layer</h4>
+      <div class="pred-q"><span class="fire">🔥</span> Apply Dijkstra's routing algorithm on a given graph. Draw routing table.</div>
+      <div class="pred-q"><span class="fire">🔥</span> Draw IPv4 header and explain each field in detail.</div>
+      <div class="pred-q"><span class="fire">🔥</span> CIDR numerical: Given network with multiple subnets needing different host counts, find all subnet addresses.</div>
+      <div class="pred-q">⚡ Compare IPv4 and IPv6 in terms of header format and addressing.</div>
+      <div class="pred-q">⚡ Write short notes on Broadcast Routing and Multicast Routing.</div>
+    </div>
+
+    <div class="pred-card">
+      <h4><span class="fire">🔥</span> Unit 4 — Transport Layer</h4>
+      <div class="pred-q"><span class="fire">🔥</span> Draw TCP header and explain all fields with their functions.</div>
+      <div class="pred-q"><span class="fire">🔥</span> Explain TCP congestion control mechanism. Describe slow start and congestion avoidance.</div>
+      <div class="pred-q"><span class="fire">🔥</span> Compare and contrast TCP and UDP with table of differences.</div>
+      <div class="pred-q">⚡ Explain TCP flow control using sliding window mechanism with example.</div>
+      <div class="pred-q">⚡ What is Quality of Service? What are QoS parameters in a network?</div>
+    </div>
+
+    <div class="pred-card">
+      <h4><span class="fire">🔥</span> Unit 6 — Link Layer</h4>
+      <div class="pred-q"><span class="fire">🔥</span> Explain Pure ALOHA and Slotted ALOHA. Show Slotted ALOHA has 2× throughput of Pure ALOHA.</div>
+      <div class="pred-q"><span class="fire">🔥</span> Describe network connection devices: Hub, Bridge, Switch, Router — their differences and use.</div>
+      <div class="pred-q"><span class="fire">🔥</span> Explain IEEE 802.3 Ethernet frame format.</div>
+      <div class="pred-q">⚡ Explain 1-persistent, p-persistent, and non-persistent CSMA protocols.</div>
+      <div class="pred-q">⚡ Write short notes on SDN and OpenFlow. What are the 3 components of SDN?</div>
+    </div>
+
+    <div class="pred-card">
+      <h4>⚡ Unit 3 — Application Layer</h4>
+      <div class="pred-q"><span class="fire">🔥</span> Explain DNS: How it resolves domain names to IP addresses. Types of DNS servers.</div>
+      <div class="pred-q"><span class="fire">🔥</span> Explain FTP, SMTP, and HTTP with their port numbers and working.</div>
+      <div class="pred-q">⚡ What is packet switching? Explain blocking and 3 generations of packet switches.</div>
+      <div class="pred-q">⚡ How do SMTP, POP3 and IMAP work together for email?</div>
+      <div class="pred-q">❗ Explain statistical multiplexing and multicasting.</div>
+    </div>
+
+    <div class="pred-card">
+      <h4>❗ Backup Questions</h4>
+      <div class="pred-q">❗ Explain Leaky Bucket Algorithm for congestion control.</div>
+      <div class="pred-q">❗ Explain RPC (Remote Procedure Call) with diagram.</div>
+      <div class="pred-q">❗ Perform bit stuffing on binary sequence: 110111111101111111101010</div>
+      <div class="pred-q">❗ Differentiate token ring and token bus.</div>
+      <div class="pred-q">❗ Compare distance vector and link-state routing algorithms.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════ CHECKLIST TAB ════════════════════════════════════ -->
+<div class="tab-panel" id="tab-checklist">
+  <div class="sec-title">✅ Final Revision Checklist</div>
+
+  <div class="sec-title" style="font-size:0.85rem;color:var(--red);margin-top:1rem">🚨 Unit 2 — Queuing Theory (CRITICAL)</div>
+  <ul class="checklist" id="cl-u2">
+    <li><input type="checkbox" onchange="clUpdate()"> Little's formula: L = λW (understand not just memorize)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Birth-Death Process — state transition diagram</li>
+    <li><input type="checkbox" onchange="clUpdate()"> M/M/1 Queue — P(n), L, Lq, W, Wq formulas</li>
+    <li><input type="checkbox" onchange="clUpdate()"> M/M/m Queue — multiple server model</li>
+    <li><input type="checkbox" onchange="clUpdate()"> M/M/1/K Queue — finite capacity model</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Traffic intensity ρ = λ/μ (ρ &lt; 1 for stable)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Queuing numerical solved (at least 2)</li>
+  </ul>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:1rem">🔥 Unit 6 — Link Layer</div>
+  <ul class="checklist" id="cl-u6">
+    <li><input type="checkbox" onchange="clUpdate()"> Pure ALOHA — S = Ge^(-2G), max = 18.4% at G=0.5</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Slotted ALOHA — S = Ge^(-G), max = 36.8% at G=1</li>
+    <li><input type="checkbox" onchange="clUpdate()"> CSMA/CD working — binary exponential backoff</li>
+    <li><input type="checkbox" onchange="clUpdate()"> CSMA/CA — RTS/CTS mechanism</li>
+    <li><input type="checkbox" onchange="clUpdate()"> IEEE 802.3 Ethernet Frame — all fields</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Hub vs Bridge vs Switch vs Router differences (table)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Bit stuffing — example solved (010111110 → add 0 after 5 ones)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> SDN — 3 layers (Application, Control, Data plane)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> OpenFlow — protocol between controller and switch</li>
+  </ul>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:1rem">🔥 Unit 5 — Network Layer</div>
+  <ul class="checklist" id="cl-u5">
+    <li><input type="checkbox" onchange="clUpdate()"> IPv4 Header — all fields (IHL, TTL, Protocol, Checksum, etc.)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> IP address classes A, B, C, D, E — ranges + default masks</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Subnetting numericals — at least 3 solved</li>
+    <li><input type="checkbox" onchange="clUpdate()"> CIDR notation — /24, /27, etc. — calculate ranges</li>
+    <li><input type="checkbox" onchange="clUpdate()"> CIDR Address Aggregation — multiple blocks</li>
+    <li><input type="checkbox" onchange="clUpdate()"> IPv4 vs IPv6 — key differences table</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Dijkstra's algorithm — worked example on graph</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Distance Vector Routing — how it works, Count-to-infinity problem</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Adaptive vs Non-Adaptive routing — table comparison</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Broadcast routing + Multicast routing short notes</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Virtual Circuit vs Datagram networks differences</li>
+  </ul>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:1rem">🔥 Unit 4 — Transport Layer</div>
+  <ul class="checklist" id="cl-u4">
+    <li><input type="checkbox" onchange="clUpdate()"> TCP Header — all fields drawn and explained</li>
+    <li><input type="checkbox" onchange="clUpdate()"> 3-Way Handshake (SYN→SYN-ACK→ACK)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> 4-Way Teardown (FIN→ACK→FIN→ACK)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> TCP Congestion Control — Slow Start, AIMD, SSTHRESH</li>
+    <li><input type="checkbox" onchange="clUpdate()"> TCP vs UDP — 10 point comparison table</li>
+    <li><input type="checkbox" onchange="clUpdate()"> UDP Header — 4 fields only (Src Port, Dst Port, Length, Checksum)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> QoS parameters — bandwidth, delay, jitter, reliability</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Leaky Bucket Algorithm — diagram + working</li>
+    <li><input type="checkbox" onchange="clUpdate()"> RPC (Remote Procedure Call) — steps with diagram</li>
+  </ul>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:1rem">⭐⭐ Unit 3 — Application Layer</div>
+  <ul class="checklist" id="cl-u3">
+    <li><input type="checkbox" onchange="clUpdate()"> DNS — working, resolver types (recursive/iterative), port 53</li>
+    <li><input type="checkbox" onchange="clUpdate()"> HTTP — port 80, GET/POST, persistent vs non-persistent</li>
+    <li><input type="checkbox" onchange="clUpdate()"> FTP — port 20/21, active vs passive mode</li>
+    <li><input type="checkbox" onchange="clUpdate()"> SMTP (port 25) → POP3 (port 110) / IMAP (port 143)</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Packet Switching — datagram vs virtual circuit</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Circuit Switching vs Packet Switching differences</li>
+    <li><input type="checkbox" onchange="clUpdate()"> P2P vs Client-Server model</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Socket Programming — socket types, basic flow</li>
+    <li><input type="checkbox" onchange="clUpdate()"> Statistical Multiplexing + Multicasting</li>
+  </ul>
+
+  <div style="margin-top:1.5rem;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:1rem;display:flex;align-items:center;gap:1rem">
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.5rem;color:var(--accent2)" id="cl-score">0%</div>
+    <div style="flex:1">
+      <div style="font-size:0.8rem;color:var(--muted);margin-bottom:4px">Revision Progress</div>
+      <div class="progress-bar"><div class="progress-fill" id="cl-bar" style="width:0%;background:var(--accent)"></div></div>
+    </div>
+    <div style="font-size:0.78rem;color:var(--muted)" id="cl-fraction">0 / 44</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════ FORMULAS TAB ════════════════════════════════════ -->
+<div class="tab-panel" id="tab-formulas">
+  <div class="sec-title">🧮 Important Formulas & Quick Notes</div>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:0.5rem">Unit 2 — Queuing Theory Formulas</div>
+  <div class="formula-box"><div class="label">Little's Formula</div>L = λW &nbsp;&nbsp;|&nbsp;&nbsp; Lq = λWq &nbsp;&nbsp;|&nbsp;&nbsp; W = Wq + (1/μ)</div>
+  <div class="formula-box"><div class="label">Traffic Intensity</div>ρ = λ/μ &nbsp;&nbsp;(must be &lt; 1 for stable system)</div>
+  <div class="formula-box"><div class="label">M/M/1 Queue</div>P(0) = 1 - ρ &nbsp;&nbsp;|&nbsp;&nbsp; P(n) = (1-ρ)·ρⁿ<br>L = ρ/(1-ρ) &nbsp;&nbsp;|&nbsp;&nbsp; Lq = ρ²/(1-ρ)<br>W = 1/(μ-λ) &nbsp;&nbsp;|&nbsp;&nbsp; Wq = ρ/(μ-λ)</div>
+  <div class="formula-box"><div class="label">M/M/1/K Queue (Finite Buffer)</div>P(0) = (1-ρ)/(1-ρ^(K+1)) &nbsp;&nbsp;|&nbsp;&nbsp; λ_eff = λ(1 - P(K))</div>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:1.2rem">Unit 6 — ALOHA Formulas</div>
+  <div class="formula-box"><div class="label">Pure ALOHA Throughput</div>S = G·e^(-2G) &nbsp;&nbsp;|&nbsp;&nbsp; Max S = 1/(2e) ≈ 18.4% at G = 0.5</div>
+  <div class="formula-box"><div class="label">Slotted ALOHA Throughput</div>S = G·e^(-G) &nbsp;&nbsp;|&nbsp;&nbsp; Max S = 1/e ≈ 36.8% at G = 1.0</div>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:1.2rem">Unit 5 — IP Addressing Quick Reference</div>
+  <div class="formula-box"><div class="label">Class A</div>0.0.0.0 – 127.255.255.255 &nbsp;|&nbsp; /8 &nbsp;|&nbsp; 16M hosts/network</div>
+  <div class="formula-box"><div class="label">Class B</div>128.0.0.0 – 191.255.255.255 &nbsp;|&nbsp; /16 &nbsp;|&nbsp; 65534 hosts/network</div>
+  <div class="formula-box"><div class="label">Class C</div>192.0.0.0 – 223.255.255.255 &nbsp;|&nbsp; /24 &nbsp;|&nbsp; 254 hosts/network</div>
+  <div class="formula-box"><div class="label">CIDR Subnetting</div>No. of subnets = 2^(borrowed bits) &nbsp;|&nbsp; Hosts per subnet = 2^(host bits) - 2<br>Block size = 256 - subnet mask octet value</div>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:1.2rem">TCP Header Fields (Must Know)</div>
+  <div class="formula-box"><div class="label">TCP Header (20 bytes minimum)</div>Source Port (16) | Dest Port (16)<br>Sequence Number (32) | ACK Number (32)<br>Header Length (4) | Reserved (6) | Flags (6) [URG,ACK,PSH,RST,SYN,FIN]<br>Window Size (16) | Checksum (16) | Urgent Pointer (16)</div>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:1.2rem">Application Layer Port Numbers</div>
+  <div class="formula-box"><div class="label">Key Ports</div>HTTP = 80 &nbsp;|&nbsp; HTTPS = 443 &nbsp;|&nbsp; FTP = 20(data),21(control)<br>SMTP = 25 &nbsp;|&nbsp; POP3 = 110 &nbsp;|&nbsp; IMAP = 143 &nbsp;|&nbsp; DNS = 53<br>Telnet = 23 &nbsp;|&nbsp; SSH = 22 &nbsp;|&nbsp; DHCP = 67/68</div>
+
+  <div class="sec-title" style="font-size:0.85rem;margin-top:1.2rem">TCP Congestion Control States</div>
+  <div class="formula-box"><div class="label">Slow Start → Congestion Avoidance → Fast Retransmit</div>Slow Start: cwnd doubles every RTT (exponential growth)<br>When cwnd ≥ ssthresh → Congestion Avoidance: cwnd += 1/cwnd (linear)<br>3 duplicate ACKs → Fast Retransmit → ssthresh = cwnd/2</div>
+</div>
+
+</div><!-- end content -->
+
+<script>
+  // TAB SWITCHING
+  function showTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  // UNIT ACCORDION
+  function toggleUnit(header) {
+    const body = header.nextElementSibling;
+    const arrow = header.querySelector('span:last-child');
+    body.classList.toggle('open');
+    arrow.textContent = body.classList.contains('open') ? '▲' : '▼';
+  }
+
+  // VIDEO PROGRESS
+  const TOTAL_VID = 105;
+  let watchedVideos = JSON.parse(localStorage.getItem('cn_watched') || '{}');
+
+  function updateVidProgress(checkbox, vidNum) {
+    if (checkbox.checked) {
+      watchedVideos[vidNum] = true;
+      checkbox.closest('tr').classList.add('checked-row');
+    } else {
+      delete watchedVideos[vidNum];
+      checkbox.closest('tr').classList.remove('checked-row');
+    }
+    localStorage.setItem('cn_watched', JSON.stringify(watchedVideos));
+    refreshVidCounter();
+  }
+
+  function refreshVidCounter() {
+    const count = Object.keys(watchedVideos).length;
+    document.getElementById('vt-count').textContent = count + ' / ' + TOTAL_VID + ' watched';
+    document.getElementById('vt-progress-bar').style.width = (count/TOTAL_VID*100) + '%';
+  }
+
+  // RESTORE CHECKBOXES ON LOAD
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.vid-check').forEach((cb, i) => {
+      const vidNum = i + 1;
+      if (watchedVideos[vidNum]) {
+        cb.checked = true;
+        cb.closest('tr').classList.add('checked-row');
+      }
+    });
+    refreshVidCounter();
+    clUpdate();
+  });
+
+  // CHECKLIST
+  function clUpdate() {
+    const all = document.querySelectorAll('.checklist input[type=checkbox]');
+    const checked = document.querySelectorAll('.checklist input[type=checkbox]:checked');
+    const pct = Math.round(checked.length / all.length * 100);
+    document.getElementById('cl-score').textContent = pct + '%';
+    document.getElementById('cl-bar').style.width = pct + '%';
+    document.getElementById('cl-fraction').textContent = checked.length + ' / ' + all.length;
+    // save
+    const state = {};
+    all.forEach((cb, i) => { state[i] = cb.checked; });
+    localStorage.setItem('cn_checklist', JSON.stringify(state));
+  }
+
+  // RESTORE CHECKLIST
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = JSON.parse(localStorage.getItem('cn_checklist') || '{}');
+    const all = document.querySelectorAll('.checklist input[type=checkbox]');
+    all.forEach((cb, i) => { if (saved[i]) cb.checked = true; });
+    clUpdate();
+  });
+</script>
+</body>
+</html>
