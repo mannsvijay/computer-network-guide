@@ -15,7 +15,7 @@ A comprehensive, interactive study resource for RTU B.Tech ECE students preparin
 
 ## 📖 How to Use
 
-1. Clone or download this repository
+1. download this repository
 2. Open `index.html` in your web browser
 3. Navigate through the tabs to access different sections
 4. Use the video tracker to mark watched videos and track progress
